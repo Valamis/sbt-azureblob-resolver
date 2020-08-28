@@ -1,6 +1,6 @@
-package io.github.lukaci
+package com.valamis.sbt.azure.blob.resolver
 
-import io.github.lukaci.ivy.IvyAzureBlobStorageURLHandler
+import com.valamis.sbt.azure.blob.resolver.ivy.IvyAzureBlobStorageURLHandler
 import sbt.Keys._
 import sbt.{AutoPlugin, PluginTrigger, Setting, settingKey, _}
 

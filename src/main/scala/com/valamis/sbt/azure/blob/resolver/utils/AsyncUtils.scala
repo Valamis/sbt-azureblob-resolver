@@ -1,4 +1,4 @@
-package io.github.lukaci.utils
+package com.valamis.sbt.azure.blob.resolver.utils
 
 import io.reactivex.Single
 

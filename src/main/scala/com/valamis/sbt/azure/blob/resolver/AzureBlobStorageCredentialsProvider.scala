@@ -1,4 +1,4 @@
-package io.github.lukaci
+package com.valamis.sbt.azure.blob.resolver
 
 import com.microsoft.azure.storage.blob.{AnonymousCredentials, ICredentials, SharedKeyCredentials, TokenCredentials}
 import sbt.ConsoleLogger

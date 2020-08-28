@@ -1,4 +1,4 @@
-package io.github.lukaci.utils
+package com.valamis.sbt.azure.blob.resolver.utils
 
 import java.io.{File, FileInputStream}
 import java.nio.channels.AsynchronousFileChannel
@@ -6,9 +6,9 @@ import java.nio.file.StandardOpenOption
 
 import com.microsoft.azure.storage.blob._
 import com.microsoft.azure.storage.blob.models.{BlobGetPropertiesResponse, BlobItem, ContainerListBlobHierarchySegmentResponse}
-import io.github.lukaci.AzureBlobStorageRef
-import io.github.lukaci.ivy.IvyAzureBlobStorageResource
-import io.github.lukaci.utils.AsyncUtils._
+import AsyncUtils._
+import com.valamis.sbt.azure.blob.resolver.AzureBlobStorageRef
+import com.valamis.sbt.azure.blob.resolver.ivy.IvyAzureBlobStorageResource
 
 import scala.collection.JavaConverters._
 import scala.concurrent.ExecutionContext.Implicits._
