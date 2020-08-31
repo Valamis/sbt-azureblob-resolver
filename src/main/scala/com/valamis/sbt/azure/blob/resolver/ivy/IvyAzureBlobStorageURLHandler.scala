@@ -8,6 +8,7 @@ import com.valamis.sbt.azure.blob.resolver.{AzureBlobStorageConfig, AzureBlobSto
 import com.valamis.sbt.azure.blob.resolver.utils.AsyncUtils.{AtMost, _}
 import org.apache.ivy.util.url.{URLHandler, URLHandlerDispatcher, URLHandlerRegistry}
 import org.apache.ivy.util.{CopyProgressEvent, CopyProgressListener}
+import sbt.ConsoleLogger
 
 import scala.concurrent.ExecutionContext.Implicits._
 import scala.concurrent.duration._
@@ -74,6 +75,9 @@ class IvyAzureBlobStorageURLHandler(config: AzureBlobStorageConfig = AzureBlobSt
 }
 
 object IvyAzureBlobStorageURLHandler {
+
+  private val logger = ConsoleLogger(System.out)
+
   def install(config: AzureBlobStorageConfig = AzureBlobStorageConfig.default, provider: AzureBlobStorageCredentialsProvider = AzureBlobStorageCredentialsProvider.default): Unit = {
     installStreamHandler(config, provider)
     installDispatcher(config, provider)
@@ -82,10 +86,10 @@ object IvyAzureBlobStorageURLHandler {
   private def installDispatcher(config: AzureBlobStorageConfig = AzureBlobStorageConfig.default, provider: AzureBlobStorageCredentialsProvider = AzureBlobStorageCredentialsProvider.default): Unit = {
     val dispatcher: URLHandlerDispatcher = URLHandlerRegistry.getDefault match {
       case disp: URLHandlerDispatcher =>
-        println("Using the existing Ivy URLHandlerDispatcher to handle blob:// URLs")
+        logger.info("Using the existing Ivy URLHandlerDispatcher to handle 'blob://' URLs.")
         disp
       case default =>
-        println("Creating a new Ivy URLHandlerDispatcher to handle blob:// URLs")
+        logger.info("creating a new Ivy URLHandlerDispatcher to handle 'blob://' URLs ...")
         val disp: URLHandlerDispatcher = new URLHandlerDispatcher()
         disp.setDefault(default)
         URLHandlerRegistry.setDefault(disp)
@@ -98,13 +102,13 @@ object IvyAzureBlobStorageURLHandler {
   private def installStreamHandler(config: AzureBlobStorageConfig = AzureBlobStorageConfig.default, provider: AzureBlobStorageCredentialsProvider = AzureBlobStorageCredentialsProvider.default): Unit = {
     Try {
       new URL(s"${config.scheme}://test")
-      println(s"The ${config.scheme} URLStreamHandler is already installed")
+      logger.info(s"The ${config.scheme} URLStreamHandler is already installed.")
     } recoverWith { case _: java.net.MalformedURLException =>
-      println(s"Installing the ${config.scheme} URLStreamHandler via java.net.URL.setURLStreamHandlerFactory")
+      logger.info(s"installing the ${config.scheme} URLStreamHandler via java.net.URL.setURLStreamHandlerFactory ...")
       URL.setURLStreamHandlerFactory(proto =>
         if(config.scheme != proto) null
         else (url: URL) => {
-          println(s"opening connection for proto [$proto] url [$url]")
+          logger.info(s"opening connection for proto [$proto] url [$url] ...")
           throw new UnsupportedOperationException(s"factory not implemented, only placeholder to allow registering [${config.scheme}] urls")
         })
       Success(())

@@ -5,6 +5,9 @@ import sbt.Keys._
 import sbt.{AutoPlugin, PluginTrigger, Setting, settingKey, _}
 
 object SBTAzureBlobStorageResolver extends AutoPlugin {
+
+  private val logger = ConsoleLogger(System.out)
+
   object autoImport {
     lazy val blobCredentialsProvider = settingKey[AzureBlobStorageCredentialsProvider]("Blob credentials provider")
     lazy val blobConfig = settingKey[AzureBlobStorageConfig]("Blob configuration")
@@ -22,7 +25,7 @@ object SBTAzureBlobStorageResolver extends AutoPlugin {
       val config = extracted.getOpt(blobConfig).getOrElse(AzureBlobStorageConfig.default)
       val provider = extracted.getOpt(blobCredentialsProvider).getOrElse(AzureBlobStorageCredentialsProvider.default)
 
-      println("installing BLOB storage url handler")
+      logger.info("installing 'blob://' URLs handler ...")
 
       IvyAzureBlobStorageURLHandler.install(config, provider)
 
