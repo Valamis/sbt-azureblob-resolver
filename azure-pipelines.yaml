@@ -1,0 +1,28 @@
+trigger:
+  batch: true
+  tags:
+    include:
+      - '*'
+  branches:
+    include:
+      - master
+
+stages:
+  - stage: Verify
+    jobs:
+      - job: Verify
+        pool:
+          vmImage: ubuntu-18.04
+        steps:
+          - bash: sbt compile test
+            displayName: SBT Verify
+
+  - stage: Publish
+    condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/'))
+    jobs:
+      - job: Publish
+        pool:
+          vmImage: ubuntu-18.04
+        steps:
+          - bash: sbt publish
+            displayName: SBT Publish
