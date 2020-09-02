@@ -1,6 +1,6 @@
-package io.github.lukaci.ivy
+package com.valamis.sbt.azure.blob.resolver.ivy
 
-import io.github.lukaci.{AzureBlobStorageConfig, AzureBlobStorageCredentialsProvider}
+import com.valamis.sbt.azure.blob.resolver.{AzureBlobStorageConfig, AzureBlobStorageCredentialsProvider}
 import org.apache.ivy.plugins.resolver.RepositoryResolver
 
 /**

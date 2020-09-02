@@ -1,4 +1,4 @@
-package io.github.lukaci.ivy
+package com.valamis.sbt.azure.blob.resolver.ivy
 
 import java.io.{IOException, InputStream}
 

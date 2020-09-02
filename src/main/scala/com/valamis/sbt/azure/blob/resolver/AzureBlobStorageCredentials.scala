@@ -1,4 +1,4 @@
-package io.github.lukaci
+package com.valamis.sbt.azure.blob.resolver
 
 import java.io.{File, FileInputStream}
 import java.util.Properties
