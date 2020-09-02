@@ -24,5 +24,11 @@ stages:
         pool:
           vmImage: ubuntu-18.04
         steps:
-          - bash: sbt publish
+          - task: AzureKeyVault@1
+            displayName: Prepare Bintray credentials
+            inputs:
+              azureSubscription: ValamisAzureResources-$(System.TeamProject)
+              KeyVaultName: ValamisVault
+              SecretsFilter: ValamisBintrayKey
+          - bash: sbt -Dbintray.user=valamis -Dbintray.pass=$(ValamisBintrayKey) publish
             displayName: SBT Publish
