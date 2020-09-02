@@ -96,8 +96,9 @@ If the default credential providers are not enough for you you can specify your 
 
 ```scala
 blobCredentialsProvider := { (accountName: String) =>
-   ...
-   AzureBlobStorageCredentials(name = accountName, key = "YYYY")
+  //returned value should of type Either[List[String], com.microsoft.azure.storage.blob.ICredentials]
+  //Left[List[String]] with list of errors should be returned if there is a failure
+  //Right[ICredentials] if credentials are successfully provided
 }
 ```
 
