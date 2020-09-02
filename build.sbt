@@ -2,7 +2,7 @@ sbtPlugin := true
 
 name         := "sbt-azureblob-resolver"
 organization := "com.valamis"
-version      := "0.10.0"
+version      := "0.11.0"
 
 scalaVersion := "2.12.10"
 sbtVersion   := "1.3.13"
