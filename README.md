@@ -95,10 +95,29 @@ accountKey=XXXXXX
 If the default credential providers are not enough for you you can specify your own CredentialsProvider using the `blobCredentialsProvider` SettingKey in your `build.sbt` file:
 
 ```scala
-blobCredentialsProvider := { (accountName: String) =>
-  //returned value should of type Either[List[String], com.microsoft.azure.storage.blob.ICredentials]
-  //Left[List[String]] with list of errors should be returned if there is a failure
-  //Right[ICredentials] if credentials are successfully provided
+import com.valamis.sbt.azure.blob.resolver._
+import com.microsoft.azure.storage.blob.ICredentials
+
+...
+
+blobCredentialsProvider := new AzureBlobStorageCredentialsProvider {
+
+  override val credentialsType: CredentialsTypes.Value = CredentialsTypes.Token
+
+  override def provide(accountName: String): Either[List[String], ICredentials] = {
+    // returned value should be instance of
+    // - Left[List[String]] with list of errors if there is a failure
+    // - Right[ICredentials] if credentials are successfully provided
+  }
+}
+```
+where credentialsType should have one of these values:
+```scala
+object CredentialsTypes extends Enumeration {
+  val Token: CredentialsTypes.Value = Value("token")
+  val SharedKey: CredentialsTypes.Value = Value("shared-key")
+  val Anon: CredentialsTypes.Value = Value("anon")
+  val All: CredentialsTypes.Value = Value("all")
 }
 ```
 
