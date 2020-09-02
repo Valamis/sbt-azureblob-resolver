@@ -1,9 +1,9 @@
 # Sbt Azure BlobStorage resolver
 
-[![Build Status](https://travis-ci.com/lukaci/sbt-azureblob-resolver.svg?branch=master)](https://travis-ci.com/lukaci/sbt-azureblob-resolver)
-![GitHub tag (latest SemVer)](https://img.shields.io/github/tag/lukaci/sbt-azureblob-resolver.svg?color=success)
+Plugin to ease resolving dependencies from and publish to Azure BlobStorage containers, using custom url syntax 'blob://'.
 
-Plugin to ease resolving dependencies from and publish to Azure BlobStorage containers, using custom url syntax blob:// (default).
+This is a fork of https://github.com/lukaci/sbt-azureblob-resolver with added support for all types of 
+credentials - original plugin supports only shared key credentials.
 
 Thanks to [`ohnosequences`](https://github.com/ohnosequences/sbt-s3-resolver) [`gkatzioura`](https://github.com/gkatzioura/CloudStorageMaven) [`frugalmechanic`](https://github.com/frugalmechanic/fm-sbt-s3-resolver) for the job done on other storage providers
 
@@ -12,7 +12,7 @@ Thanks to [`ohnosequences`](https://github.com/ohnosequences/sbt-s3-resolver) [`
 SBT 1.1 support is available using version `>= 0.10.0`:
 
 ```scala
-addSbtPlugin("io.github.lukaci" %% "sbt-azureblob-resolver" % "0.10.0")
+addSbtPlugin("com.valamis" %% "sbt-azureblob-resolver" % "0.10.0")
 ```
 
 ## Examples
@@ -56,23 +56,32 @@ publishTo := Some(Resolver.url("Blob Snapshots", url("blob://youraccountname/sna
 ### Add this to your project/plugins.sbt file:
 
 ```scala
-addSbtPlugin("io.github.lukaci" %% "sbt-azureblob-resolver" % "0.10.0")
+addSbtPlugin("com.valamis" %% "sbt-azureblob-resolver" % "0.10.0")
 ```
+
+Note: if you need to resolve other plugins, published to your Azure Blob storage, then you need to put `addSbtPlugin` 
+line to `project/project/project/plugins.sbt` file. 
+See [here](https://www.scala-sbt.org/1.x/docs/Organizing-Build.html#sbt+is+recursive) for details
 
 ### Azure BlobStorage Credentials
 
 Credentials are checked in 
- 1. Environment Variable 
- 2. Specific account name property files
+ 1. Environment variables (token credentials first)
+ 2. Specific account name property files (token credentials first)
+ 
+If no credentials found, then **anonymous** access is used 
 
-#### Environment Variable
 
-    BLOB_CREDENTIALS=<ACCOUNT_NAME_1>:<SECRET_KEY_1>:<ACCOUNT_NAME_2>:<SECRET_KEY_2>:...
+#### Environment Variables
+
+    SBT_BLOB_TOKEN_CREDENTIALS=<ACCOUNT_NAME_1>:<SECRET_KEY_1>:<ACCOUNT_NAME_2>:<SECRET_KEY_2>:...
+    SBT_BLOB_SHARED_KEY_CREDENTIALS=<ACCOUNT_NAME_1>:<SECRET_KEY_1>:<ACCOUNT_NAME_2>:<SECRET_KEY_2>:...
     
-#### Specific Property Files
+#### Specific property Files
 
 ```shell
-.<account_name>.blob-credentials
+.<account_name>.sbt-blob-token-credentials
+.<account_name>.sbt-blob-shared-key-credentials
 ```
 
 containing
@@ -95,6 +104,8 @@ blobCredentialsProvider := { (accountName: String) =>
 ## Authors
 
 lukaci (<a href="https://github.com/lukaci" rel="author">GitHub</a>)
+
+Pavel Kornilov (<a href="https://github.com/pavel-kornilov" rel="author">GitHub</a>) - support for all types of credentials 
 
 ## License
 
