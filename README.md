@@ -105,7 +105,7 @@ blobCredentialsProvider := new AzureBlobStorageCredentialsProvider {
   override val credentialsType: CredentialsTypes.Value = CredentialsTypes.Token
 
   override def provide(accountName: String): Either[List[String], ICredentials] = {
-    // returned value should be instance of
+    // returned value should be an instance of
     // - Left[List[String]] with list of errors if there is a failure
     // - Right[ICredentials] if credentials are successfully provided
   }
